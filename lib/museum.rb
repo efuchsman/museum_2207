@@ -1,3 +1,4 @@
+require 'pp'
 class Museum
 
 attr_reader :name, :exhibits, :patrons
@@ -16,11 +17,55 @@ attr_reader :name, :exhibits, :patrons
     recommended = @exhibits.select do |exhibit|
       exhibit if patron.interests.include?(exhibit.name)
     end
-    p recommended
+    recommended
   end
 
   def admit(patron)
     @patrons << patron
   end
 
+  def patrons_by_exhibit_interest
+    pbei_hash = {}
+    @exhibits.each do |exhibit|
+      pbei_hash[exhibit] = @patrons.select do |patron|
+        patron.interests.include?(exhibit.name)
+      end
+    end
+    pbei_hash
+  end
+
+  def ticket_lottery_contestants(exhibit)
+    @patrons.select do |patron|
+      patron.interests.include?(exhibit.name) && patron.spending_money < exhibit.cost
+    end
+  end
+
+  def draw_lottery_winner(exhibit)
+    contestant_names_array = []
+    ticket_lottery_contestants(exhibit).each do |patron|
+      contestant_names_array << patron.name
+    end
+
+    if contestant_names_array.length == 1
+    return contestant_names_array[0]
+
+    elsif contestant_names_array.length > 1
+      return contestant_names_array.sample
+    else
+      nil
+    end
+  end
+
+  def announce_lottery_winner(exhibit)
+    if draw_lottery_winner(exhibit) == nil
+      "No winners for this lottery"
+    else
+    "#{draw_lottery_winner(exhibit)} has won the #{exhibit.name} lottery"
+    end
+  end
+
+
+
+
 end
+
