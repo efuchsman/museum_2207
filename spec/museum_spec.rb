@@ -142,4 +142,44 @@ RSpec.describe Museum do
 
     expect(dmns.announce_lottery_winner(imax)).to eq("No winners for this lottery")
   end
+
+ it "has patrons of an exhibit" do
+  dmns = Museum.new("Denver Museum of Nature and Science")
+  gems_and_minerals = Exhibit.new({name: "Gems and Minerals", cost: 0})
+  dead_sea_scrolls = Exhibit.new({name: "Dead Sea Scrolls", cost: 10})
+  imax = Exhibit.new({name: "IMAX",cost: 15})
+  patron_1 = Patron.new("Bob", 10)
+  patron_2 = Patron.new("Sally", 20)
+  morgan = Patron.new("Morgan", 15)
+  tj = Patron.new("TJ", 7)
+
+  dmns.add_exhibit(gems_and_minerals)
+  dmns.add_exhibit(dead_sea_scrolls)
+  dmns.add_exhibit(imax)
+
+  tj.add_interest("IMAX")
+  tj.add_interest("Dead Sea Scrolls")
+  patron_1.add_interest("Dead Sea Scrolls")
+  patron_1.add_interest("IMAX")
+  patron_2.add_interest("IMAX")
+  patron_2.add_interest("Dead Sea Scrolls")
+  morgan.add_interest("Gems and Minerals")
+  morgan.add_interest("Dead Sea Scrolls")
+
+
+  dmns.admit(tj)
+  dmns.admit(patron_1)
+  dmns.admit(patron_2)
+  dmns.admit(morgan)
+
+  expect(dmns.patrons_of_exhibits).to eq(
+    {
+       dead_sea_scrolls => [patron_2, morgan],
+       imax => [patron_2],
+       gems_and_minerals => [morgan]
+     }
+    )
+
+ end
+
 end

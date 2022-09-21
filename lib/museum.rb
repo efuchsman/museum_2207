@@ -22,6 +22,12 @@ attr_reader :name, :exhibits, :patrons
 
   def admit(patron)
     @patrons << patron
+    # @exhibits.each do |exhibit|
+    #   if patron.interests.include?(exhibit.name)
+    #     patron.spending_money -= exhibit.cost
+    #   end
+    # end
+
   end
 
   def patrons_by_exhibit_interest
@@ -64,8 +70,16 @@ attr_reader :name, :exhibits, :patrons
     end
   end
 
+  def patrons_of_exhibits
+    p_o_e_hash = {}
 
-
+    @exhibits.each do |exhibit|
+      p_o_e_hash[exhibit] = @patrons.select do |patron|
+      patron.interests.include?(exhibit.name) && patron.spending_money > exhibit.cost
+      end
+    end
+    p_o_e_hash
+  end
 
 end
 
