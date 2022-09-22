@@ -31,7 +31,7 @@ attr_reader :name, :exhibits, :patrons
   end
 
   def patrons_by_exhibit_interest
-    pbei_hash = {}
+    pbei_hash = Hash.new{|h, k| h[k] = []}
     @exhibits.each do |exhibit|
       pbei_hash[exhibit] = @patrons.select do |patron|
         patron.interests.include?(exhibit.name)
@@ -71,7 +71,7 @@ attr_reader :name, :exhibits, :patrons
   end
 
   def patrons_of_exhibits
-    p_o_e_hash = {}
+    p_o_e_hash = Hash.new { |h, k| h[k] = []}
 
     @exhibits.each do |exhibit|
       p_o_e_hash[exhibit] = @patrons.select do |patron|
